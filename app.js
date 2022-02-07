@@ -10,8 +10,10 @@ const path = require("path");
 const helmet = require("helmet");
 const sanitizeHtml = require("sanitize-html");
 const hpp = require("hpp");
+const connectDB = require("./db");
 
 const app = express();
+connectDB();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
