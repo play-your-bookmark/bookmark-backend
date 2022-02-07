@@ -26,6 +26,7 @@ const folderSchema = new mongoose.Schema({
   ],
   category: {
     type: String,
+    required: true,
   },
   parent_folder: {
     type: Object.Id,
