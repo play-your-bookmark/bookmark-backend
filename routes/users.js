@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const decodeIdToken = require("../middlewares/decodeIdToken");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.post('/new', function(req, res, next) {
+  const { name, uid, email } = req.currentUser;
 });
 
 module.exports = router;
