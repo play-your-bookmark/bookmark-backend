@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
+const cors = require("cors");
+
+const router = express.Router();
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const path = require("path");
@@ -13,7 +16,7 @@ const hpp = require("hpp");
 const connectDB = require("./db");
 
 const app = express();
-connectDB();
+// connectDB();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -26,27 +29,30 @@ if (process.env.NODE_ENV === "production") {
 } else {
   app.use(morgan("dev"));
 }
+
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-const user = require("./routes/users");
+const user = require("./routes/user");
+const category = require("./routes/category");
+const folder = require("./routes/folder");
+const decodeIDToken = require("./middlewares/decodeIdToken");
 
 app.use("/user", user);
+app.use("/category", category);
+app.use("/folder", folder);
 
-// catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
 app.use((err, req, res, next) => {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render("error");
 });
