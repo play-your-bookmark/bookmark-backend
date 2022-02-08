@@ -4,15 +4,15 @@
  * Module dependencies.
  */
 
-const http = require("http");
 const debug = require("debug")("express-form:server");
+const http = require("http");
 const app = require("../app");
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || "6000");
+const port = normalizePort(process.env.PORT || "7000");
 app.set("port", port);
 
 /**
