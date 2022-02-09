@@ -8,7 +8,6 @@ admin.initializeApp({
 });
 
 async function decodeIDToken(req, res, next) {
-  console.log(req.cookie);
   try {
     const idToken = req.headers.authorization.split("Bearer ")[1];
     const decodedToken = await admin.auth().verifyIdToken(idToken);

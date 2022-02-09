@@ -5,26 +5,26 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  e_mail: {
+  email: {
     type: String,
     required: true,
-  },
-  gitgub: {
-    type: String,
   },
   uid: {
     type: String,
     required: true,
   },
+  github: {
+    type: String,
+  },
   liked_folder: [
     {
-      type: Object.Id,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Folder",
     },
   ],
   created_folder: [
     {
-      type: Object.Id,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Folder",
     },
   ],

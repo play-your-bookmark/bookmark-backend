@@ -6,7 +6,7 @@ const folderSchema = new mongoose.Schema({
     required: true,
   },
   publisher: {
-    type: Object.Id,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   published_at: {
@@ -14,13 +14,13 @@ const folderSchema = new mongoose.Schema({
   },
   likes: [
     {
-      type: Object.Id,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
   bookmark: [
     {
-      type: Object.Id,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Bookmark",
     },
   ],
@@ -29,7 +29,7 @@ const folderSchema = new mongoose.Schema({
     required: true,
   },
   parent_folder: {
-    type: Object.Id,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Folder",
   },
 });

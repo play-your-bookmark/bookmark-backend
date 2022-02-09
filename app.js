@@ -16,7 +16,7 @@ const hpp = require("hpp");
 const connectDB = require("./db");
 
 const app = express();
-// connectDB();
+connectDB();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(morgan("dev"));
 }
 
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: process.env.CLIENT_SERVER }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -41,9 +41,9 @@ const category = require("./routes/category");
 const folder = require("./routes/folder");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
-app.use("/user", user);
-app.use("/category", category);
-app.use("/folder", folder);
+app.use("/user", decodeIDToken, user);
+app.use("/category", decodeIDToken, category);
+app.use("/folder", decodeIDToken, folder);
 
 app.use((req, res, next) => {
   next(createError(404));
