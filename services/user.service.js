@@ -19,3 +19,13 @@ exports.updateUser = async function (param, filter) {
     throw Error("Error while updating user");
   }
 };
+
+exports.deleteUser = async function (param) {
+  try {
+    const result = await User.findOneAndRemove({ param });
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw Error("Error while deleting user");
+  }
+};

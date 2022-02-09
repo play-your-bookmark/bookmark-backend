@@ -64,3 +64,16 @@ exports.setGithubAccount = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.deleteUser = async function (req, res, next) {
+  const userId = req.params.id;
+
+  try {
+    await UserService.deleteUser(userId);
+
+    res.status(200).send("User has been deleted");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
