@@ -37,6 +37,7 @@ exports.getUser = async function (req, res, next) {
 
   try {
     const user = await UserService.getUser(userId);
+
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
@@ -45,5 +46,21 @@ exports.getUser = async function (req, res, next) {
 };
 
 exports.setGithubAccount = async function (req, res, next) {
-  //
+  const data = {
+    user: {
+      userId: req.params.id,
+      githubAccount: req.params.github,
+    },
+  };
+
+  try {
+    const user = await UserService.updateUser(data.user.userId, {
+      github: data.user.githubAccount,
+    });
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 };

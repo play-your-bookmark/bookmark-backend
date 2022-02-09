@@ -9,3 +9,13 @@ exports.getUser = async function (param) {
     throw Error("Error while paginating user");
   }
 };
+
+exports.updateUser = async function (param, filter) {
+  try {
+    const updatedUser = await User.findOneAndUpdate({ param }, filter);
+    return updatedUser;
+  } catch (error) {
+    console.error(error);
+    throw Error("Error while updating user");
+  }
+};
