@@ -22,7 +22,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.0",
     "morgan": "~1.9.1",
-    "sanitize-html": "^2.6.1"
+    "sanitize-html": "^2.6.1",
+    "sqlite-async": "^1.1.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^8.8.0",
