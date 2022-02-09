@@ -1,17 +1,13 @@
-const express = require("express");
-const User = require("../models/User");
+const UserService = require("../services/user.service");
+const User = require("../models/user.model");
 
-const router = express.Router();
-
-router.get("/:id", (req, res, next) => {});
-router.get("/:id/github", (req, res, next) => {});
-router.post("/new", async (req, res, next) => {
+exports.saveUser = async function (req, res, next) {
   const { name, uid, email } = req.currentUser;
 
   try {
-    const isUserExist = await User.findOne({ uid });
+    const user = await UserService.getUser(uid);
 
-    if (isUserExist) {
+    if (user) {
       res.status(200).send("User already exist in db");
       return;
     }
@@ -34,7 +30,8 @@ router.post("/new", async (req, res, next) => {
     console.error(error);
     next(error);
   }
-});
-router.put("/:id", (req, res, next) => {});
+};
 
-module.exports = router;
+exports.getUser = async function (req, res, next) {
+  const userId = req.params.id;
+};

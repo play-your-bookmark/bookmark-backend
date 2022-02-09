@@ -36,9 +36,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-const user = require("./routes/user");
-const category = require("./routes/category");
-const folder = require("./routes/folder");
+const user = require("./routes/user.route");
+const category = require("./routes/category.route");
+const folder = require("./routes/folder.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
 app.use("/user", decodeIDToken, user);
