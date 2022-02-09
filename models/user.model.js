@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   },
   github: {
     type: String,
+    default: "github not registed",
   },
   liked_folder: [
     {
