@@ -34,4 +34,16 @@ exports.saveUser = async function (req, res, next) {
 
 exports.getUser = async function (req, res, next) {
   const userId = req.params.id;
+
+  try {
+    const user = await UserService.getUser(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.setGithubAccount = async function (req, res, next) {
+  //
 };

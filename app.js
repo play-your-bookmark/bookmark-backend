@@ -41,9 +41,9 @@ const category = require("./routes/category.route");
 const folder = require("./routes/folder.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
-app.use("/user", decodeIDToken, user);
-app.use("/category", decodeIDToken, category);
-app.use("/folder", decodeIDToken, folder);
+app.use("/user", user);
+app.use("/category", category);
+app.use("/folder", folder);
 
 app.use((req, res, next) => {
   next(createError(404));
