@@ -40,6 +40,7 @@ function findFilesInDir(startPath, filter, targetFile, depth = 0) {
     const filename = Path.join(startPath, files[i]);
 
     if (!fs.existsSync(filename)) {
+      // eslint-disable-next-line no-continue
       continue;
     }
 
