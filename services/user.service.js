@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 
 exports.getUser = async function (param) {
   try {
-    const user = await User.findOne({ param });
+    const user = await User.findOne({ uid: param });
     return user;
   } catch (error) {
     console.error(error);

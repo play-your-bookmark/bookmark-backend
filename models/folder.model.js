@@ -20,13 +20,25 @@ const folderSchema = new mongoose.Schema({
   ],
   bookmark: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Bookmark",
+      title: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+      utc_time: {
+        type: Date,
+        required: true,
+      },
+      browser: {
+        type: String,
+      },
     },
   ],
   category: {
     type: String,
-    required: true,
   },
   parent_folder: {
     type: mongoose.Schema.Types.ObjectId,

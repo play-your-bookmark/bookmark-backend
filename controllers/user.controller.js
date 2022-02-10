@@ -6,7 +6,6 @@ exports.saveUser = async function (req, res, next) {
 
   try {
     const user = await UserService.getUser(uid);
-
     if (user) {
       res.status(200).send("User already exist in db");
       return;
