@@ -1,6 +1,6 @@
 const FolderService = require("../services/folder.service");
-const User = require("../models/user.model");
 const UserService = require("../services/user.service");
+const User = require("../models/user.model");
 
 exports.getFolders = async function (req, res, next) {
   const { uid } = req.currentUser;
@@ -10,9 +10,11 @@ exports.getFolders = async function (req, res, next) {
 
     if (user) {
       const { _id } = user;
+      const filter = { publisher: _id };
 
       try {
-        const folders = await FolderService.getFolders(_id);
+        const folders = await FolderService.getFolders(filter);
+
         res.status(200).json(folders);
       } catch (error) {
         console.error(error);
@@ -47,12 +49,17 @@ exports.getCategoryFolder = async function (req, res, next) {
 
 exports.updateFolders = async function (req, res, next) {
   const folderList = req.body;
+<<<<<<< HEAD
   // publisher가 없는 새 폴더를 위해 현재 로그인한 유저 정보 지정
+=======
+
+>>>>>>> 9a165c67a8d39b3f68bcfbbaad6ab45e0c3369f1
   try {
-    const currentUser = await User.findOne({ uid: req.currentUser.uid })._id;
+    const user = await User.findOne({ uid: req.currentUser.uid });
+    const userId = user._id;
 
     try {
-      const result = await FolderService.updateFolder({ folderList, currentUser });
+      const result = await FolderService.updateFolder({ folderList, userId });
 
       res.send(result);
     } catch (error) {
@@ -66,9 +73,10 @@ exports.updateFolders = async function (req, res, next) {
 };
 
 exports.deleteFolder = async function (req, res, next) {
-  const { id } = req.params;
+  const { _id } = req.params;
+
   try {
-    await FolderService.deleteFolder(id);
+    await FolderService.deleteFolder(_id);
 
     res.status(200).send("Folder has been deleted");
   } catch (error) {
