@@ -42,9 +42,9 @@ const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
-app.use("/user", user);
+app.use("/user", decodeIDToken, user);
 app.use("/category", category);
-app.use("/folder", folder);
+app.use("/folder", decodeIDToken, folder);
 app.use("/link", link);
 
 app.use((req, res, next) => {
