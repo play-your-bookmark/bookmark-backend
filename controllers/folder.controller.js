@@ -27,6 +27,7 @@ exports.getFolders = async function (req, res, next) {
 
 exports.updateFolders = async function (req, res, next) {
   const folderList = req.body;
+  console.log(req.currentUser);
   // publisher가 없는 새 폴더를 위해 현재 로그인한 유저 정보 지정
   try {
     const currentUser = await User.findOne({ uid: req.currentUser.uid })._id;
