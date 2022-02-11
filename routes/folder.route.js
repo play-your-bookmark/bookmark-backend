@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/main", FolderController.getFolders);
 router.post("/new", FolderController.updateFolders);
-router.delete("/:id", FolderController.deleteFolder);
+router.delete("/:_id", FolderController.deleteFolder);
 
 router.put("/:id/like", (req, res, next) => {});
 router.delete("/:id/like", (req, res, next) => {});

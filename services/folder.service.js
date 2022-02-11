@@ -1,10 +1,8 @@
 const Folder = require("../models/folder.model");
 
-exports.getUserFolders = async function (param) {
-  const { _id } = param;
-
+exports.getFolders = async function (filter) {
   try {
-    const folders = await Folder.find({ publisher: _id });
+    const folders = await Folder.find(filter);
 
     return folders;
   } catch (error) {
@@ -14,34 +12,43 @@ exports.getUserFolders = async function (param) {
 };
 
 exports.updateFolder = async function (param) {
-  const { folderList, currentUser } = param;
+  const { folderList, userId } = param;
   // 생성 날짜가 없는 새 폴더를 위해 현재 시간 지정
   const currentDate = new Date(+new Date() + 3240 * 10000)
     .toISOString()
     .replace("T", " ")
     .replace(/\..*/, "");
-  console.log(currentUser);
+
   try {
-    const result = folderList.map(async (folderInfo) => {
-      const { id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
-      // 임시로 title로 구분하여 사용.
-      // 새폴더 자체를 모달로 수정할 수 있을 경우, findByIdAndUpdate 사용
-      await Folder.findOneAndUpdate(
-        { title },
-        {
-          title,
-          publisher: currentUser,
+    folderList.map(async (folderInfo) => {
+      const { _id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
+      if (_id.split(" ")[1] === "new") {
+        await Folder.create({
+          _id: _id.split(" ")[0],
+          title: title,
+          publisher: userId,
           published_at: published_at || currentDate,
           likes: likes || [],
           bookmark: bookmark || [],
-          category: category || "",
+          category: category || "empty",
+          parent_folder: parent_folder.split(" ")[0],
+        });
+
+        return;
+      }
+
+      await Folder.findByIdAndUpdate(
+        _id,
+        {
+          title: title,
+          likes: likes,
+          bookmark: bookmark,
+          category: category,
           parent_folder: parent_folder,
         },
         { upsert: true, new: true },
       );
     });
-
-    return result;
   } catch (error) {
     console.error(error);
     throw Error("Error while updating Folders");
@@ -50,23 +57,9 @@ exports.updateFolder = async function (param) {
 
 exports.deleteFolder = async function (param) {
   try {
-    await Folder.findByIdAndDelete({ _id: param });
+    await Folder.findByIdAndDelete(param);
   } catch (error) {
     console.error(error);
     throw Error("Error while deleting folder");
   }
 };
-// exports.addFolder = async function (param) {
-//   try {
-//     const result = await Folder.insert
-//   }
-// };
-
-// exports.saveFolder = async function (param) {
-//   try {
-//     const result = await Folder.findOneAndUpdate({ param })
-//   } catch (error) {
-//     console.log(error);
-//     throw Error("Error while saving Folder");
-//   }
-// };
