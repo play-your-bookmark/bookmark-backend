@@ -3,7 +3,7 @@ const FolderController = require("../controllers/folder.controller");
 
 const router = express.Router();
 
-router.get("/main", FolderController.getFolders);
+router.get("/main", FolderController.getUserCreatedFolders);
 router.post("/new", FolderController.updateFolders);
 router.delete("/:_id", FolderController.deleteFolder);
 

@@ -2,7 +2,7 @@ const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 
-exports.getFolders = async function (req, res, next) {
+exports.getUserCreatedFolders = async function (req, res, next) {
   const { uid } = req.currentUser;
 
   try {
