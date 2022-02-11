@@ -37,7 +37,10 @@ const folderSchema = new mongoose.Schema({
       },
     },
   ],
-  category: {
+  main_category: {
+    type: String,
+  },
+  sub_category: {
     type: String,
   },
   parent_folder: {

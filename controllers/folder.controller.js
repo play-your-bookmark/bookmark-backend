@@ -12,7 +12,7 @@ exports.getFolders = async function (req, res, next) {
       const { _id } = user;
 
       try {
-        const folders = await FolderService.getUserFolders(_id);
+        const folders = await FolderService.getFolders(_id);
         res.status(200).json(folders);
       } catch (error) {
         console.error(error);
@@ -25,9 +25,28 @@ exports.getFolders = async function (req, res, next) {
   }
 };
 
+exports.getCategoryFolder = async function (req, res, next) {
+  const origin = req.query["0"];
+  const category = req.query["1"];
+
+  let filter = null;
+  if (origin === "mainCategory") {
+    filter = { main_category: category };
+  } else {
+    filter = { sub_category: category };
+  }
+
+  try {
+    const folders = await FolderService.getFolders(filter);
+    res.status(200).send(folders);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.updateFolders = async function (req, res, next) {
   const folderList = req.body;
-  console.log(req.currentUser);
   // publisher가 없는 새 폴더를 위해 현재 로그인한 유저 정보 지정
   try {
     const currentUser = await User.findOne({ uid: req.currentUser.uid })._id;

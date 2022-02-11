@@ -1,10 +1,8 @@
 const Folder = require("../models/folder.model");
 
-exports.getUserFolders = async function (param) {
-  const { _id } = param;
-
+exports.getFolders = async function (filter) {
   try {
-    const folders = await Folder.find({ publisher: _id });
+    const folders = await Folder.find(filter);
 
     return folders;
   } catch (error) {
@@ -20,7 +18,6 @@ exports.updateFolder = async function (param) {
     .toISOString()
     .replace("T", " ")
     .replace(/\..*/, "");
-  console.log(currentUser);
   try {
     const result = folderList.map(async (folderInfo) => {
       const { id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;

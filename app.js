@@ -37,13 +37,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 const user = require("./routes/user.route");
-const category = require("./routes/category.route");
 const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
 app.use("/user", decodeIDToken, user);
-app.use("/category", decodeIDToken, category);
 app.use("/folder", decodeIDToken, folder);
 app.use("/link", decodeIDToken, link);
 
