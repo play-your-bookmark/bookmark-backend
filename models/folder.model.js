@@ -41,8 +41,7 @@ const folderSchema = new mongoose.Schema({
     type: String,
   },
   parent_folder: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Folder",
+    type: mongoose.Schema.Types.Mixed,
   },
 });
 
