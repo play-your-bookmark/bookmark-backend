@@ -20,23 +20,22 @@ exports.updateFolder = async function (param) {
     .toISOString()
     .replace("T", " ")
     .replace(/\..*/, "");
-
+  console.log(currentUser);
   try {
     const result = folderList.map(async (folderInfo) => {
-      const { id, title, bookmark, publisher, published_at, likes, category, parent_folder } =
-        folderInfo;
+      const { id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
       // 임시로 title로 구분하여 사용.
       // 새폴더 자체를 모달로 수정할 수 있을 경우, findByIdAndUpdate 사용
       await Folder.findOneAndUpdate(
         { title },
         {
           title,
-          publisher: publisher || currentUser,
+          publisher: currentUser,
           published_at: published_at || currentDate,
           likes: likes || [],
           bookmark: bookmark || [],
           category: category || "",
-          parent_folder: parent_folder || "root",
+          parent_folder: parent_folder,
         },
         { upsert: true, new: true },
       );
