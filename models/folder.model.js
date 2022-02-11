@@ -41,7 +41,10 @@ const folderSchema = new mongoose.Schema({
     },
   ],
   bookmark: [bookmarkSchema],
-  category: {
+  main_category: {
+    type: String,
+  },
+  sub_category: {
     type: String,
   },
   parent_folder: {

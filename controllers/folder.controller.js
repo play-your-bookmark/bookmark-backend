@@ -27,9 +27,28 @@ exports.getFolders = async function (req, res, next) {
   }
 };
 
+exports.getCategoryFolder = async function (req, res, next) {
+  const origin = req.query["0"];
+  const category = req.query["1"];
+
+  let filter = null;
+  if (origin === "mainCategory") {
+    filter = { main_category: category };
+  } else {
+    filter = { sub_category: category };
+  }
+
+  try {
+    const folders = await FolderService.getFolders(filter);
+    res.status(200).send(folders);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.updateFolders = async function (req, res, next) {
   const folderList = req.body;
-
   try {
     const user = await User.findOne({ uid: req.currentUser.uid });
     const userId = user._id;
