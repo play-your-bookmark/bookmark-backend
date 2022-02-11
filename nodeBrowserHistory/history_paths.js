@@ -1,5 +1,7 @@
 const Path = require("path");
+const os = require("os");
 
+// console.log(os.userInfo());
 const homeDirectory = process.env.HOME;
 
 function setupForMac(defaultPaths) {
@@ -13,12 +15,7 @@ function setupForMac(defaultPaths) {
 }
 
 function setupForWindows(defaultPaths) {
-  const appDataDirectory = Path.join(
-    process.env.HOMEDRIVE,
-    "Users",
-    process.env.USERNAME,
-    "AppData",
-  );
+  const appDataDirectory = Path.join(os.userInfo().homedir, "AppData");
 
   defaultPaths.chrome = Path.join(appDataDirectory, "Local", "Google", "Chrome");
 }

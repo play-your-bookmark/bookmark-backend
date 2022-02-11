@@ -35,7 +35,6 @@ function findFilesInDir(startPath, filter, targetFile, depth = 0) {
   }
 
   const files = fs.readdirSync(startPath);
-
   for (let i = 0; i < files.length; i++) {
     const filename = Path.join(startPath, files[i]);
 
