@@ -5,13 +5,16 @@ const bookmarkSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  link: {
+  url: {
     type: String,
     required: true,
   },
-  date_time_of_visit: {
+  utc_time: {
     type: Date,
     required: true,
+  },
+  browser: {
+    type: String,
   },
 });
 
