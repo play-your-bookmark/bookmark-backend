@@ -18,7 +18,6 @@ exports.updateFolder = async function (param) {
     .toISOString()
     .replace("T", " ")
     .replace(/\..*/, "");
-
   try {
     folderList.map(async (folderInfo) => {
       const { _id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
