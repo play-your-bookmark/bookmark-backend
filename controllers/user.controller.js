@@ -1,3 +1,6 @@
+const fetch = require("node-fetch");
+
+const { fileLoader } = require("ejs");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 
@@ -33,12 +36,28 @@ exports.saveUser = async function (req, res, next) {
 };
 
 exports.getUser = async function (req, res, next) {
-  const userId = req.params.id;
+  const userId = req.query["0"];
+  let user = null;
+  let isMyPage = null;
+  let url = null;
 
   try {
-    const user = await UserService.getUser(userId);
+    if (!userId) {
+      user = await UserService.getUser(req.currentUser.uid);
+      isMyPage = true;
+    } else {
+      user = await UserService.getUser(userId);
+      isMyPage = user.uid === req.currentUser.uid;
+    }
 
-    res.status(200).json(user);
+    url = user.github === "github not registed" ? null : `http://www.github.com/${user.github}`;
+
+    res.status(200).json({
+      url,
+      avatar_url: user.avatar_url,
+      name: user.name,
+      isMyPage,
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -46,19 +65,48 @@ exports.getUser = async function (req, res, next) {
 };
 
 exports.setGithubAccount = async function (req, res, next) {
-  const data = {
-    user: {
-      userId: req.params.id,
-      githubAccount: req.params.github,
-    },
-  };
+  let data = null;
+
+  if (req.params.id === "undefined") {
+    data = {
+      user: {
+        userId: req.currentUser.uid,
+        githubAccount: req.params.github,
+      },
+    };
+  } else {
+    data = {
+      user: {
+        userId: req.params.id,
+        githubAccount: req.params.github,
+      },
+    };
+  }
 
   try {
-    const user = await UserService.updateUser(data.user.userId, {
-      github: data.user.githubAccount,
-    });
+    if (data.user.githubAccount) {
+      const githubAPIResponse = await fetch(
+        `http://api.github.com/users/${data.user.githubAccount}`,
+      );
+      const githubAPIResponseJson = await githubAPIResponse.json();
 
-    res.status(200).json(user);
+      await UserService.updateUser(data.user.userId, {
+        github: data.user.githubAccount,
+        avatar_url: githubAPIResponseJson.avatar_url,
+      });
+      console.log();
+      res.status(200).json({
+        url: githubAPIResponseJson.url,
+        avatarUrl: githubAPIResponseJson.avatar_url,
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      url: null,
+      avatarUrl: null,
+    });
   } catch (error) {
     console.error(error);
     next(error);
