@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "github not registed",
   },
+  avatar_url: {
+    type: String,
+    default: "github not registed",
+  },
   liked_folder: [
     {
       type: mongoose.Schema.Types.ObjectId,
