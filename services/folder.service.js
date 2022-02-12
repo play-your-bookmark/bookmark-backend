@@ -2,7 +2,8 @@ const Folder = require("../models/folder.model");
 
 exports.getFolders = async function (filter) {
   try {
-    const folders = await Folder.find(filter);
+    const folders = await Folder.find(filter).populate({ path: "publisher" });
+
 
     return folders;
   } catch (error) {
@@ -21,7 +22,17 @@ exports.updateFolder = async function (param) {
 
   try {
     folderList.map(async (folderInfo) => {
-      const { _id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
+      const {
+        _id,
+        title,
+        bookmark,
+        main_category,
+        sub_category,
+        published_at,
+        likes,
+        parent_folder,
+      } = folderInfo;
+
       if (_id.split(" ")[1] === "new") {
         await Folder.create({
           _id: _id.split(" ")[0],
@@ -30,7 +41,8 @@ exports.updateFolder = async function (param) {
           published_at: published_at || currentDate,
           likes: likes || [],
           bookmark: bookmark || [],
-          category: category || "empty",
+          main_category: main_category,
+          sub_category: sub_category,
           parent_folder: parent_folder.split(" ")[0],
         });
 
@@ -43,7 +55,8 @@ exports.updateFolder = async function (param) {
           title: title,
           likes: likes,
           bookmark: bookmark,
-          category: category,
+          main_category: main_category,
+          sub_category: sub_category,
           parent_folder: parent_folder,
         },
         { upsert: true, new: true },
