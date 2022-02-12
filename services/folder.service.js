@@ -4,7 +4,6 @@ exports.getFolders = async function (filter) {
   try {
     const folders = await Folder.find(filter).populate({ path: "publisher" });
 
-
     return folders;
   } catch (error) {
     console.error(error);
