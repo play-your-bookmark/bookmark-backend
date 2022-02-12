@@ -11,7 +11,6 @@ const bookmarkSchema = new mongoose.Schema({
   },
   utc_time: {
     type: Date,
-    required: true,
   },
   browser: {
     type: String,
@@ -52,5 +51,19 @@ const folderSchema = new mongoose.Schema({
     ref: "Folder",
   },
 });
+
+folderSchema.methods.addLike = function (userId) {
+  this.likes.push(userId);
+  return this.save();
+};
+
+folderSchema.methods.cancelLike = function (userId) {
+  const index = this.likes.indexOf(userId);
+
+  if (index > -1) {
+    this.likes.pull(userId);
+  }
+  return this.save();
+};
 
 module.exports = mongoose.model("Folder", folderSchema);

@@ -1,6 +1,8 @@
+const { Types } = require("mongoose");
 const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
+const Folder = require("../models/folder.model");
 
 exports.getFolders = async function (req, res, next) {
   const { uid } = req.currentUser;
@@ -40,7 +42,7 @@ exports.getCategoryFolder = async function (req, res, next) {
 
   try {
     const folders = await FolderService.getFolders(filter);
-    res.status(200).send(folders);
+    res.status(200).send({ origin, category, folders });
   } catch (error) {
     console.error(error);
     next(error);
@@ -75,6 +77,35 @@ exports.deleteFolder = async function (req, res, next) {
     await FolderService.deleteFolder(_id);
 
     res.status(200).send("Folder has been deleted");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.handleLike = async function (req, res, next) {
+  const { id, index } = req.params;
+  const origin = req.query[0];
+
+  try {
+    const folder = await Folder.findById(id);
+    const user = await User.findOne({ uid: req.currentUser.uid });
+    const userId = user._id;
+    const folderLikes = folder.likes;
+    const isUserExist = folderLikes.some((objectId) => objectId.equals(userId));
+    let folderAction = "save";
+
+    if (isUserExist) {
+      folderAction = "delete";
+      folder.cancelLike(user._id);
+      user.deleteLikedFolder(id);
+      return res.status(200).send({ folder, index, origin, folderAction, id });
+    }
+
+    folder.addLike(user._id);
+    user.addLikedFolder(id);
+
+    res.status(201).send({ folder, index, origin, folderAction, id });
   } catch (error) {
     console.error(error);
     next(error);

@@ -11,6 +11,17 @@ exports.getFolders = async function (filter) {
   }
 };
 
+exports.getUniqueFolder = async function (param) {
+  try {
+    const uniqueFolder = await Folder.findById(param);
+
+    return uniqueFolder;
+  } catch (error) {
+    console.error(error);
+    throw Error("Error while getting unique folder");
+  }
+};
+
 exports.updateFolder = async function (param) {
   const { folderList, userId } = param;
   // 생성 날짜가 없는 새 폴더를 위해 현재 시간 지정
