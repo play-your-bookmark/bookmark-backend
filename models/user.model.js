@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "github not registed",
   },
+  avatar_url: {
+    type: String,
+    default: "github not registed",
+  },
   liked_folder: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,5 +34,19 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
+userSchema.methods.addLikedFolder = function (folderId) {
+  this.liked_folder.push(folderId);
+  return this.save();
+};
+
+userSchema.methods.deleteLikedFolder = function (folderId) {
+  const index = this.liked_folder.indexOf(folderId);
+
+  if (index > -1) {
+    this.liked_folder.pull(folderId);
+  }
+  return this.save();
+};
 
 module.exports = mongoose.model("User", userSchema);
