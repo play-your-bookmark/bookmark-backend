@@ -1,8 +1,18 @@
+const mongoose = require("mongoose");
 const User = require("../models/user.model");
 
 exports.getUser = async function (param) {
   try {
-    const user = await User.findOne({ uid: param });
+    let user = null;
+
+    if (param.length === 28) {
+      user = await User.findOne({ uid: param });
+    } else {
+      const objectId = mongoose.Types.ObjectId(param);
+
+      user = await User.findById({ _id: objectId });
+    }
+
     return user;
   } catch (error) {
     console.error(error);
@@ -12,7 +22,14 @@ exports.getUser = async function (param) {
 
 exports.updateUser = async function (param, filter) {
   try {
-    const updatedUser = await User.findOneAndUpdate({ param }, filter);
+    let updatedUser = null;
+
+    if (param.length === 28) {
+      updatedUser = await User.findOneAndUpdate({ uid: param }, filter);
+    } else {
+      updatedUser = await User.findOneAndUpdate({ _id: param }, filter);
+    }
+
     return updatedUser;
   } catch (error) {
     console.error(error);
