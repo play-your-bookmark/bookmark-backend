@@ -1,4 +1,3 @@
-const { Types } = require("mongoose");
 const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
@@ -63,6 +62,13 @@ exports.updateFolders = async function (req, res, next) {
 
     try {
       const result = await FolderService.updateFolder({ folderList, userId });
+
+      // user에 생성된 폴더 넣기
+      const userCreatedFolders = await FolderService.getFolders({ publisher: userId });
+
+      await UserService.updateUser(userId, {
+        $set: { created_folder: [userCreatedFolders] },
+      });
 
       res.send(result);
     } catch (error) {
