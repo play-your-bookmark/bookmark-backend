@@ -3,6 +3,23 @@ const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 
+exports.getFolder = async function (req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const uniqueFolder = await Folder.findById(id);
+
+    if (uniqueFolder) {
+      return res.status(200).send(uniqueFolder);
+    }
+
+    return res.status(404).send("Folder Not Found");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.getFolders = async function (req, res, next) {
   const { uid } = req.currentUser;
 
