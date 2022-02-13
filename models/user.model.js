@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   liked_folder: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.Mixed,
       ref: "Folder",
     },
   ],

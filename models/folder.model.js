@@ -1,22 +1,5 @@
 const mongoose = require("mongoose");
 
-const bookmarkSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  url: {
-    type: String,
-    required: true,
-  },
-  utc_time: {
-    type: Date,
-  },
-  browser: {
-    type: String,
-  },
-});
-
 const folderSchema = new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.Mixed,
@@ -39,7 +22,22 @@ const folderSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  bookmark: [bookmarkSchema],
+  bookmark: [
+    {
+      title: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
+      utc_time: {
+        type: Date,
+      },
+      browser: {
+        type: String,
+      },
+    },
+  ],
   main_category: {
     type: String,
   },

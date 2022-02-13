@@ -11,17 +11,7 @@ exports.getFolders = async function (req, res, next) {
 
   try {
     if (userObjectId) {
-      const a = await User.findOneAndUpdate(
-        { _id: userObjectId },
-        {
-          created_folder: ["6208d3cd7972fa1b845d8c9c", "6208d3da7972fa1b845d8c9d"],
-        },
-        { new: true },
-      );
-      // console.log(a);
-      const user = await UserService.getUser(userObjectId);
-      // console.log(user);
-      const b = await User.findById(userObjectId).populate({
+      const userCreatedFolders = await User.findById(userObjectId).populate({
         path: "created_folder",
         match: {
           _id: {
@@ -29,10 +19,11 @@ exports.getFolders = async function (req, res, next) {
           },
         },
       });
-      // .exec((err, data) => console.log(data));
-      console.log(b);
+
+      res.status(200).json(userCreatedFolders.created_folder);
       return;
     }
+
     const user = await UserService.getUser(uid);
 
     if (user) {
@@ -83,6 +74,13 @@ exports.updateFolders = async function (req, res, next) {
 
     try {
       const result = await FolderService.updateFolder({ folderList, userId });
+
+      // user에 생성된 폴더 넣기
+      const userCreatedFolders = await FolderService.getFolders({ publisher: userId });
+
+      await UserService.updateUser(userId, {
+        $set: { created_folder: [userCreatedFolders] },
+      });
 
       res.send(result);
     } catch (error) {
