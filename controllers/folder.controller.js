@@ -60,11 +60,11 @@ exports.updateFolders = async function (req, res, next) {
 
       // user에 생성된 폴더 넣기
       const userCreatedFolders = await FolderService.getFolders({ publisher: userId });
-      console.log(userCreatedFolders);
-      const changedUser = await UserService.updateUser(userId, {
+
+      await UserService.updateUser(userId, {
         $set: { created_folder: [userCreatedFolders] },
       });
-      console.log(changedUser);
+
       res.send(result);
     } catch (error) {
       console.error(error);
