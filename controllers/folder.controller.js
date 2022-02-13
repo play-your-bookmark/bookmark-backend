@@ -33,7 +33,6 @@ exports.getCategoryFolder = async function (req, res, next) {
   const compare = (a, b) => (a.likes.length > b.likes.length ? -1 : 1);
   const origin = req.query["0"];
   const category = req.query["1"];
-  const userUid = req.currentUser.uid;
 
   const user = await User.findOne({ uid: req.currentUser.uid });
   const userId = user._id;
