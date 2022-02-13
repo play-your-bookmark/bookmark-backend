@@ -30,8 +30,13 @@ exports.getFolders = async function (req, res, next) {
 };
 
 exports.getCategoryFolder = async function (req, res, next) {
+  const compare = (a, b) => (a.likes.length > b.likes.length ? -1 : 1);
   const origin = req.query["0"];
   const category = req.query["1"];
+  const userUid = req.currentUser.uid;
+
+  const user = await User.findOne({ uid: req.currentUser.uid });
+  const userId = user._id;
 
   let filter = null;
   if (origin === "mainCategory") {
@@ -42,7 +47,8 @@ exports.getCategoryFolder = async function (req, res, next) {
 
   try {
     const folders = await FolderService.getFolders(filter);
-    res.status(200).send({ origin, category, folders });
+    folders.sort(compare);
+    res.status(200).send({ origin, category, folders, userId });
   } catch (error) {
     console.error(error);
     next(error);
