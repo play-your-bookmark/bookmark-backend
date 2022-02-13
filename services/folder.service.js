@@ -24,23 +24,29 @@ exports.getUniqueFolder = async function (param) {
 
 exports.updateFolder = async function (param) {
   const { folderList, userId } = param;
-  // 생성 날짜가 없는 새 폴더를 위해 현재 시간 지정
-  const currentDate = new Date(+new Date() + 3240 * 10000)
-    .toISOString()
-    .replace("T", " ")
-    .replace(/\..*/, "");
   try {
     folderList.map(async (folderInfo) => {
-      const { _id, title, bookmark, published_at, likes, category, parent_folder } = folderInfo;
+      const {
+        _id,
+        title,
+        bookmark,
+        main_category,
+        sub_category,
+        published_at,
+        likes,
+        parent_folder,
+      } = folderInfo;
+
       if (_id.split(" ")[1] === "new") {
         await Folder.create({
           _id: _id.split(" ")[0],
           title: title,
           publisher: userId,
-          published_at: published_at || currentDate,
+          published_at: published_at,
+          main_category: main_category,
+          sub_category: sub_category,
           likes: likes || [],
           bookmark: bookmark || [],
-          category: category || "empty",
           parent_folder: parent_folder.split(" ")[0],
         });
 
@@ -50,11 +56,14 @@ exports.updateFolder = async function (param) {
       await Folder.findByIdAndUpdate(
         _id,
         {
-          title: title,
-          likes: likes,
-          bookmark: bookmark,
-          category: category,
-          parent_folder: parent_folder,
+          $set: {
+            title: title,
+            likes: likes,
+            bookmark: bookmark,
+            main_category: main_category,
+            sub_category: sub_category,
+            parent_folder: parent_folder,
+          },
         },
         { upsert: true, new: true },
       );
