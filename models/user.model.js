@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   ],
   created_folder: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.Mixed,
       ref: "Folder",
     },
   ],

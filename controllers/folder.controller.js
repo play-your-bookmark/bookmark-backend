@@ -1,13 +1,38 @@
 const { Types } = require("mongoose");
+const mongoose = require("mongoose");
 const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 
 exports.getFolders = async function (req, res, next) {
+  const userObjectId = req.query["0"];
   const { uid } = req.currentUser;
 
   try {
+    if (userObjectId) {
+      const a = await User.findOneAndUpdate(
+        { _id: userObjectId },
+        {
+          created_folder: ["6208d3cd7972fa1b845d8c9c", "6208d3da7972fa1b845d8c9d"],
+        },
+        { new: true },
+      );
+      // console.log(a);
+      const user = await UserService.getUser(userObjectId);
+      // console.log(user);
+      const b = await User.findById(userObjectId).populate({
+        path: "created_folder",
+        match: {
+          _id: {
+            $exists: true,
+          },
+        },
+      });
+      // .exec((err, data) => console.log(data));
+      console.log(b);
+      return;
+    }
     const user = await UserService.getUser(uid);
 
     if (user) {
