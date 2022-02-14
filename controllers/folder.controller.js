@@ -20,25 +20,28 @@ exports.getFolders = async function (req, res, next) {
         },
       });
 
-      res.status(200).json(userCreatedFolders.created_folder);
+      if (!userCreatedFolders.created_folder.length) {
+        return res.status(200).json([]);
+      }
+
+      res.status(200).json(userCreatedFolders.created_folder[0]);
       return;
     }
 
-    const user = await UserService.getUser(uid);
+    const userCreatedFolders = await User.findOne({ uid }).populate({
+      path: "created_folder",
+      match: {
+        _id: {
+          $exists: true,
+        },
+      },
+    });
 
-    if (user) {
-      const { _id } = user;
-      const filter = { publisher: _id };
-
-      try {
-        const folders = await FolderService.getFolders(filter);
-
-        res.status(200).json(folders);
-      } catch (error) {
-        console.error(error);
-        next(error);
-      }
+    if (!userCreatedFolders.created_folder.length) {
+      return res.status(200).json([]);
     }
+
+    res.status(200).json(userCreatedFolders.created_folder[0]);
   } catch (error) {
     console.error(error);
     next(error);
@@ -59,6 +62,41 @@ exports.getCategoryFolder = async function (req, res, next) {
   try {
     const folders = await FolderService.getFolders(filter);
     res.status(200).send({ origin, category, folders });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.getLikeFolder = async function (req, res, next) {
+  const userObjectId = req.query["0"];
+  const { uid } = req.currentUser;
+
+  try {
+    if (userObjectId) {
+      const userLikeFolders = await User.findById(userObjectId).populate({
+        path: "liked_folder",
+        match: {
+          _id: {
+            $exists: true,
+          },
+        },
+      });
+
+      res.status(200).json(userLikeFolders.liked_folder);
+      return;
+    }
+
+    const userLikeFolders = await User.findOne({ uid }).populate({
+      path: "liked_folder",
+      match: {
+        _id: {
+          $exists: true,
+        },
+      },
+    });
+
+    res.status(200).json(userLikeFolders.liked_folder);
   } catch (error) {
     console.error(error);
     next(error);
