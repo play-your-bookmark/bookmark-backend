@@ -1,4 +1,5 @@
 const Folder = require("../models/folder.model");
+const User = require("../models/user.model");
 
 exports.getFolders = async function (filter) {
   try {
@@ -68,6 +69,16 @@ exports.updateFolder = async function (param) {
         { upsert: true, new: true },
       );
     });
+
+    const result = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          created_folder: folderList,
+        },
+      },
+      { new: true },
+    );
   } catch (error) {
     console.error(error);
     throw Error("Error while updating Folders");
