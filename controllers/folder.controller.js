@@ -5,6 +5,23 @@ const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 
+exports.getFolder = async function (req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const uniqueFolder = await Folder.findById(id);
+
+    if (uniqueFolder) {
+      return res.status(200).send(uniqueFolder);
+    }
+
+    return res.status(404).send("Folder Not Found");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.getFolders = async function (req, res, next) {
   const userObjectId = req.query["0"];
   const { uid } = req.currentUser;
@@ -49,8 +66,12 @@ exports.getFolders = async function (req, res, next) {
 };
 
 exports.getCategoryFolder = async function (req, res, next) {
+  const compare = (a, b) => (a.likes.length > b.likes.length ? -1 : 1);
   const origin = req.query["0"];
   const category = req.query["1"];
+
+  const user = await User.findOne({ uid: req.currentUser.uid });
+  const userId = user._id;
 
   let filter = null;
   if (origin === "mainCategory") {
@@ -61,7 +82,8 @@ exports.getCategoryFolder = async function (req, res, next) {
 
   try {
     const folders = await FolderService.getFolders(filter);
-    res.status(200).send({ origin, category, folders });
+    folders.sort(compare);
+    res.status(200).send({ origin, category, folders, userId });
   } catch (error) {
     console.error(error);
     next(error);
