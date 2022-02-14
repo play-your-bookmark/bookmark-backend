@@ -1,4 +1,5 @@
 const Folder = require("../models/folder.model");
+const User = require("../models/user.model");
 
 exports.getFolders = async function (filter) {
   try {
@@ -67,6 +68,19 @@ exports.updateFolder = async function (param) {
         },
         { upsert: true, new: true },
       );
+    });
+    const checkedList = folderList.map((folder) => {
+      if (folder._id.split(" ")[1]) {
+        return folder._id.split(" ")[0];
+      }
+
+      return folder._id;
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $set: {
+        created_folder: checkedList,
+      },
     });
   } catch (error) {
     console.error(error);
