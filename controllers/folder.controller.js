@@ -40,8 +40,7 @@ exports.getFolders = async function (req, res, next) {
       if (!userCreatedFolders.created_folder.length) {
         return res.status(200).json([]);
       }
-
-      res.status(200).json(userCreatedFolders.created_folder[0]);
+      res.status(200).json(userCreatedFolders.created_folder);
       return;
     }
 
@@ -58,7 +57,7 @@ exports.getFolders = async function (req, res, next) {
       return res.status(200).json([]);
     }
 
-    res.status(200).json(userCreatedFolders.created_folder[0]);
+    res.status(200).json(userCreatedFolders.created_folder);
   } catch (error) {
     console.error(error);
     next(error);
