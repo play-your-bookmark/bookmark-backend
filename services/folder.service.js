@@ -69,16 +69,19 @@ exports.updateFolder = async function (param) {
         { upsert: true, new: true },
       );
     });
+    const checkedList = folderList.map((folder) => {
+      if (folder._id.split(" ")[1]) {
+        return folder._id.split(" ")[0];
+      }
 
-    const result = await User.findByIdAndUpdate(
-      userId,
-      {
-        $set: {
-          created_folder: folderList,
-        },
+      return folder._id;
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $set: {
+        created_folder: checkedList,
       },
-      { new: true },
-    );
+    });
   } catch (error) {
     console.error(error);
     throw Error("Error while updating Folders");
