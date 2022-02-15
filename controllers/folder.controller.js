@@ -28,34 +28,12 @@ exports.getFolders = async function (req, res, next) {
 
   try {
     if (userObjectId) {
-      const userCreatedFolders = await User.findById(userObjectId).populate({
-        path: "created_folder",
-        match: {
-          _id: {
-            $exists: true,
-          },
-        },
-      });
+      const userCreatedFolders = await FolderService.populateFolder(userObjectId, "created_folder");
 
-      if (!userCreatedFolders.created_folder.length) {
-        return res.status(200).json([]);
-      }
       res.status(200).json(userCreatedFolders.created_folder);
       return;
     }
-
-    const userCreatedFolders = await User.findOne({ uid }).populate({
-      path: "created_folder",
-      match: {
-        _id: {
-          $exists: true,
-        },
-      },
-    });
-
-    if (!userCreatedFolders.created_folder.length) {
-      return res.status(200).json([]);
-    }
+    const userCreatedFolders = await FolderService.populateFolder(uid, "created_folder");
 
     res.status(200).json(userCreatedFolders.created_folder);
   } catch (error) {
@@ -95,27 +73,13 @@ exports.getLikeFolder = async function (req, res, next) {
 
   try {
     if (userObjectId) {
-      const userLikeFolders = await User.findById(userObjectId).populate({
-        path: "liked_folder",
-        match: {
-          _id: {
-            $exists: true,
-          },
-        },
-      });
+      const userLikeFolders = await FolderService.populateFolder(userObjectId, "liked_folder");
 
       res.status(200).json(userLikeFolders.liked_folder);
       return;
     }
 
-    const userLikeFolders = await User.findOne({ uid }).populate({
-      path: "liked_folder",
-      match: {
-        _id: {
-          $exists: true,
-        },
-      },
-    });
+    const userLikeFolders = await FolderService.populateFolder(uid, "liked_folder");
 
     res.status(200).json(userLikeFolders.liked_folder);
   } catch (error) {

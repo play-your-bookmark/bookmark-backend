@@ -96,3 +96,31 @@ exports.deleteFolder = async function (param) {
     throw Error("Error while deleting folder");
   }
 };
+
+exports.populateFolder = async function (param, path) {
+  let userPopulatedFolders;
+
+  if (param.length === 24) {
+    userPopulatedFolders = await User.findById(param).populate({
+      path: path,
+      match: {
+        _id: {
+          $exists: true,
+        },
+      },
+    });
+
+    return userPopulatedFolders;
+  }
+
+  userPopulatedFolders = await User.findOne({ uid: param }).populate({
+    path: path,
+    match: {
+      _id: {
+        $exists: true,
+      },
+    },
+  });
+
+  return userPopulatedFolders;
+};
