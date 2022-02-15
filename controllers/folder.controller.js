@@ -1,3 +1,5 @@
+const { Types } = require("mongoose");
+const mongoose = require("mongoose");
 const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
@@ -21,24 +23,19 @@ exports.getFolder = async function (req, res, next) {
 };
 
 exports.getFolders = async function (req, res, next) {
+  const userObjectId = req.query["0"];
   const { uid } = req.currentUser;
 
   try {
-    const user = await UserService.getUser(uid);
+    if (userObjectId) {
+      const userCreatedFolders = await FolderService.populateFolder(userObjectId, "created_folder");
 
-    if (user) {
-      const { _id } = user;
-      const filter = { publisher: _id };
-
-      try {
-        const folders = await FolderService.getFolders(filter);
-
-        res.status(200).json(folders);
-      } catch (error) {
-        console.error(error);
-        next(error);
-      }
+      res.status(200).json(userCreatedFolders.created_folder);
+      return;
     }
+    const userCreatedFolders = await FolderService.populateFolder(uid, "created_folder");
+
+    res.status(200).json(userCreatedFolders.created_folder);
   } catch (error) {
     console.error(error);
     next(error);
@@ -64,6 +61,27 @@ exports.getCategoryFolder = async function (req, res, next) {
     const folders = await FolderService.getFolders(filter);
     folders.sort(compare);
     res.status(200).send({ origin, category, folders, userId });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.getLikeFolder = async function (req, res, next) {
+  const userObjectId = req.query["0"];
+  const { uid } = req.currentUser;
+
+  try {
+    if (userObjectId) {
+      const userLikeFolders = await FolderService.populateFolder(userObjectId, "liked_folder");
+
+      res.status(200).json(userLikeFolders.liked_folder);
+      return;
+    }
+
+    const userLikeFolders = await FolderService.populateFolder(uid, "liked_folder");
+
+    res.status(200).json(userLikeFolders.liked_folder);
   } catch (error) {
     console.error(error);
     next(error);

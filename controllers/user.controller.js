@@ -94,7 +94,7 @@ exports.setGithubAccount = async function (req, res, next) {
         github: data.user.githubAccount,
         avatar_url: githubAPIResponseJson.avatar_url,
       });
-      console.log();
+
       res.status(200).json({
         url: githubAPIResponseJson.url,
         avatarUrl: githubAPIResponseJson.avatar_url,
