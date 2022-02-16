@@ -1,5 +1,4 @@
 const FolderService = require("../services/folder.service");
-const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 
