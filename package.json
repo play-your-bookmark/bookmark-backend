@@ -8,6 +8,7 @@
     "prod": "cross-env NODE_ENV=production node ./bin/www"
   },
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.8",
     "90crew-node-browser-history": "^0.0.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
