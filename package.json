@@ -28,7 +28,6 @@
     "mongoose": "^6.2.0",
     "morgan": "~1.9.1",
     "node-fetch": "^2.6.7",
-    "node-gyp": "^8.4.1",
     "sanitize-html": "^2.6.1",
     "sqlite-async": "^1.1.2",
     "sqlite3": "^5.0.0",
