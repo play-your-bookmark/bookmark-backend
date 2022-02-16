@@ -26,6 +26,7 @@
     "node-fetch": "^2.6.7",
     "sanitize-html": "^2.6.1",
     "sqlite-async": "^1.1.2",
+    "sqlite3": "^5.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
