@@ -1,4 +1,4 @@
-const { getChromeHistory } = require("../nodeBrowserHistory");
+const { getChromeHistory } = require("90crew-node-browser-history");
 
 exports.getHistoryLink = async function (req, res, next) {
   const minute = Number(req.query.minute);
