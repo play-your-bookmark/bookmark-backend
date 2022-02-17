@@ -39,14 +39,14 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 const user = require("./routes/user.route");
 const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
-const decodeIDToken = require("./middlewares/decodeIdToken");
+// const decodeIDToken = require("./middlewares/decodeIdToken");
 
 app.use("/ping", (req, res, next) => {
   res.status(200).json({ ping: "ok" });
 });
-app.use("/user", decodeIDToken, user);
-app.use("/folder", decodeIDToken, folder);
-app.use("/link", decodeIDToken, link);
+app.use("/user", user);
+app.use("/folder", folder);
+app.use("/link", link);
 
 app.use((req, res, next) => {
   next(createError(404));
