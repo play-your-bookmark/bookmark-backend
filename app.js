@@ -48,7 +48,7 @@ app.use("/ping", (req, res, next) => {
   res.status(200).json({ ping: "ok" });
 });
 app.use("/user", decodeIDToken, user);
-app.use("/folder", decodeIDToken, folder);
+app.use("/folder", folder);
 app.use("/link", decodeIDToken, link);
 
 app.use((req, res, next) => {
