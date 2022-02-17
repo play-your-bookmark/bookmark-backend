@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(morgan("dev"));
 }
 
-app.use(cors({ credentials: true, origin: process.env.CLIENT_SERVER }));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
