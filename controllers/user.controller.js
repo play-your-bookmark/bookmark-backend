@@ -1,6 +1,5 @@
 const fetch = require("node-fetch");
 
-const { fileLoader } = require("ejs");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 

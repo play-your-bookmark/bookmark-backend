@@ -15,8 +15,11 @@ const sanitizeHtml = require("sanitize-html");
 const hpp = require("hpp");
 const connectDB = require("./db");
 
+connectDB().then((data) => {
+  console.log("data connected");
+});
+
 const app = express();
-connectDB();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
