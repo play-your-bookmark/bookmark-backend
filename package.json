@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./bin/www",
+    "start": "cross-env NODE_ENV=production PORT=7001 node ./bin/www",
     "dev": "NODE_ENV=development PORT=7001 nodemon ./bin/www",
-    "prod": "cross-env NODE_ENV=production node ./bin/www"
+    "prod": "cross-env NODE_ENV=production PORT=7001 node ./bin/www"
   },
   "engines": { "node": "14.17.0"},
   "dependencies": {
