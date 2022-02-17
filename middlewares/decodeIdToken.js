@@ -1,7 +1,7 @@
 const admin = require("firebase-admin");
 const createError = require("http-errors");
 
-const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\\n");
+const privateKey = process.env.PRIVATE_KEY.replace(/\n/g, "");
 
 const serviceAccount = {
   "type": process.env.FIRBASE_TYPE,
@@ -15,8 +15,6 @@ const serviceAccount = {
   "auth_provider_x509_cert_url": process.env.AUTH_PROVIDER_CERT_URL,
   "client_x509_cert_url": process.env.CLIENT_CERT_URL,
 };
-
-console.log(serviceAccount);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
