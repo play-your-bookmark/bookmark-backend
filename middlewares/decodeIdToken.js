@@ -1,7 +1,7 @@
 const admin = require("firebase-admin");
 const createError = require("http-errors");
-const { privateKey } = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
 
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
 const serviceAccount = {
   "type": process.env.FIRBASE_TYPE,
   "project_id": process.env.PROJECT_ID,
