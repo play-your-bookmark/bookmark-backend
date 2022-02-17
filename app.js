@@ -41,6 +41,9 @@ const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
+app.use("/ping", (req, res, next) => {
+  res.status(200).json({ ping: "ok" });
+});
 app.use("/user", decodeIDToken, user);
 app.use("/folder", decodeIDToken, folder);
 app.use("/link", decodeIDToken, link);
