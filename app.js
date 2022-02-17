@@ -44,25 +44,8 @@ const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
 
-const Folder1 = require("./models/folder.model");
-
-app.use("/ping", (req, res, next) => {
-  res.status(200).json({ ping: "ok" });
-});
-
-app.use("/newping", async (req, res, next) => {
-  try {
-    await Folder1.find({}, (err, docs) => {
-      return res.status(200).send(docs);
-    });
-  } catch (error) {
-    console.error("no connection to db");
-    throw Error("if this error be caused, there is no db connection");
-  }
-});
-
 app.use("/user", decodeIDToken, user);
-app.use("/folder", folder);
+app.use("/folder", decodeIDToken, folder);
 app.use("/link", decodeIDToken, link);
 
 app.use((req, res, next) => {

@@ -3,7 +3,6 @@ const FolderController = require("../controllers/folder.controller");
 
 const router = express.Router();
 
-router.get("/something", FolderController.getSomeFolder);
 router.get("/unique/:id", FolderController.getFolder);
 router.get("/main", FolderController.getFolders);
 router.get("/category", FolderController.getCategoryFolder);

@@ -1,20 +1,8 @@
-const { Types } = require("mongoose");
 const mongoose = require("mongoose");
 const FolderService = require("../services/folder.service");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
-
-exports.getSomeFolder = async function (req, res, next) {
-  try {
-    await Folder.find({}, (err, docs) => {
-      return res.status(200).send(docs);
-    });
-  } catch (error) {
-    console.error("no connection to db");
-    throw Error("if this error be caused, there is no db connection");
-  }
-};
 
 exports.getFolder = async function (req, res, next) {
   const { id } = req.params;
