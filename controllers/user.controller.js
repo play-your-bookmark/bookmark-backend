@@ -23,7 +23,7 @@ exports.saveUser = async function (req, res, next) {
     newUser.save((err, data) => {
       if (err) {
         console.log(err.stack);
-        return res.status(500).render("error", { error: err, message: err.message });
+        return res.status(502).render("error", { error: err, message: err.message });
       }
 
       res.status(201).send("User has been added to db");
