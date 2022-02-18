@@ -13,6 +13,7 @@ const path = require("path");
 const helmet = require("helmet");
 const sanitizeHtml = require("sanitize-html");
 const hpp = require("hpp");
+const multer = require("multer");
 const connectDB = require("./db");
 
 const app = express();
@@ -40,10 +41,14 @@ const user = require("./routes/user.route");
 const folder = require("./routes/folder.route");
 const link = require("./routes/list.route");
 const decodeIDToken = require("./middlewares/decodeIdToken");
+const file = require("./routes/file.route");
+
+const upload = multer();
 
 app.use("/user", decodeIDToken, user);
 app.use("/folder", decodeIDToken, folder);
 app.use("/link", decodeIDToken, link);
+app.use("/file", decodeIDToken, upload.single("bookmark"), file);
 
 app.use((req, res, next) => {
   next(createError(404));
