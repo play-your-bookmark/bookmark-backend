@@ -1,27 +1,38 @@
 const FolderService = require("../services/folder.service");
-const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 const Folder = require("../models/folder.model");
 
+exports.getFolder = async function (req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const uniqueFolder = await Folder.findById(id);
+
+    if (uniqueFolder) {
+      return res.status(200).send(uniqueFolder);
+    }
+
+    return res.status(404).send("Folder Not Found");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.getFolders = async function (req, res, next) {
+  const userObjectId = req.query["0"];
   const { uid } = req.currentUser;
 
   try {
-    const user = await UserService.getUser(uid);
+    if (userObjectId) {
+      const userCreatedFolders = await FolderService.populateFolder(userObjectId, "created_folder");
 
-    if (user) {
-      const { _id } = user;
-      const filter = { publisher: _id };
-
-      try {
-        const folders = await FolderService.getFolders(filter);
-
-        res.status(200).json(folders);
-      } catch (error) {
-        console.error(error);
-        next(error);
-      }
+      res.status(200).json(userCreatedFolders.created_folder);
+      return;
     }
+    const userCreatedFolders = await FolderService.populateFolder(uid, "created_folder");
+
+    res.status(200).json(userCreatedFolders.created_folder);
   } catch (error) {
     console.error(error);
     next(error);
@@ -53,6 +64,27 @@ exports.getCategoryFolder = async function (req, res, next) {
   }
 };
 
+exports.getLikeFolder = async function (req, res, next) {
+  const userObjectId = req.query["0"];
+  const { uid } = req.currentUser;
+
+  try {
+    if (userObjectId) {
+      const userLikeFolders = await FolderService.populateFolder(userObjectId, "liked_folder");
+
+      res.status(200).json(userLikeFolders.liked_folder);
+      return;
+    }
+
+    const userLikeFolders = await FolderService.populateFolder(uid, "liked_folder");
+
+    res.status(200).json(userLikeFolders.liked_folder);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 exports.updateFolders = async function (req, res, next) {
   const folderList = req.body;
   // publisher가 없는 새 폴더를 위해 현재 로그인한 유저 정보 지정
@@ -61,16 +93,9 @@ exports.updateFolders = async function (req, res, next) {
     const userId = user._id;
 
     try {
-      const result = await FolderService.updateFolder({ folderList, userId });
+      await FolderService.updateFolder({ folderList, userId });
 
-      // user에 생성된 폴더 넣기
-      const userCreatedFolders = await FolderService.getFolders({ publisher: userId });
-
-      await UserService.updateUser(userId, {
-        $set: { created_folder: [userCreatedFolders] },
-      });
-
-      res.send(result);
+      res.status(200).send("update success");
     } catch (error) {
       console.error(error);
       next(error);
