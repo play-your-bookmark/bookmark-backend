@@ -4,3 +4,9 @@ dist/*
 .env
 .DS_Store
 firebaseKey.json
+.npmrc
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

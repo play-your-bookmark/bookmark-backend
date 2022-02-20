@@ -1,6 +1,5 @@
 const admin = require("firebase-admin");
 const createError = require("http-errors");
-
 const serviceAccount = require("../firebaseKey.json");
 
 admin.initializeApp({
