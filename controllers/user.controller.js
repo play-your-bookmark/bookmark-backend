@@ -1,6 +1,4 @@
 const fetch = require("node-fetch");
-
-const { fileLoader } = require("ejs");
 const UserService = require("../services/user.service");
 const User = require("../models/user.model");
 
@@ -24,7 +22,7 @@ exports.saveUser = async function (req, res, next) {
     newUser.save((err, data) => {
       if (err) {
         console.log(err.stack);
-        return res.status(500).render("error", { error: err, message: err.message });
+        return res.status(502).render("error", { error: err, message: err.message });
       }
 
       res.status(201).send("User has been added to db");

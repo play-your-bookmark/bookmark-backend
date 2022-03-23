@@ -15,8 +15,8 @@ exports.getUser = async function (param) {
 
     return user;
   } catch (error) {
-    console.error(error);
-    throw Error("Error while paginating user");
+    console.error("Error while paginating user");
+    return false;
   }
 };
 
