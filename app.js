@@ -14,10 +14,14 @@ const helmet = require("helmet");
 const sanitizeHtml = require("sanitize-html");
 const hpp = require("hpp");
 const multer = require("multer");
+const decodeIDToken = require("./middlewares/decodeIdToken");
 const connectDB = require("./db");
 
+connectDB().then((data) => {
+  console.log("data connected");
+});
+
 const app = express();
-connectDB();
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -31,7 +35,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(morgan("dev"));
 }
 
-app.use(cors({ credentials: true, origin: process.env.CLIENT_SERVER }));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -39,7 +43,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 const user = require("./routes/user.route");
 const folder = require("./routes/folder.route");
-const decodeIDToken = require("./middlewares/decodeIdToken");
 const file = require("./routes/file.route");
 
 const upload = multer();
