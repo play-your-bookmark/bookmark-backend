@@ -5,6 +5,7 @@ dist/*
 .DS_Store
 firebaseKey.json
 .npmrc
+package-lock.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
