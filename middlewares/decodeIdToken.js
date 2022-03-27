@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
 const createError = require("http-errors");
+
 const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3({
@@ -8,7 +9,7 @@ const s3 = new AWS.S3({
 });
 const params = { Bucket: "90crew-playyourbookmark2", Key: "firebaseKey.json" };
 
-s3.getObject(params, (err, data) => {
+s3.getObject(params, async (err, data) => {
   if (err) {
     console.log(err, err.stack);
   } else {
