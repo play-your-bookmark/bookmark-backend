@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
 });
 const params = { Bucket: "90crew-playyourbookmark2", Key: "firebaseKey.json" };
 
-s3.getObject(params, async (err, data) => {
+s3.getObject(params, (err, data) => {
   if (err) {
     console.log(err, err.stack);
   } else {
